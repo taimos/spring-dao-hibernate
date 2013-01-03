@@ -25,6 +25,11 @@ public interface EntityDAO<T extends IEntity<U>, U> {
 
 	/**
 	 * @param id
+	 */
+	void deleteById(U id);
+
+	/**
+	 * @param id
 	 * @return the element with the given id or null if not found
 	 */
 	T findById(U id);

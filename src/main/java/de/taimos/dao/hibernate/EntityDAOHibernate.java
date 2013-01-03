@@ -10,6 +10,7 @@ import de.taimos.dao.EntityDAO;
 import de.taimos.dao.IEntity;
 import de.taimos.dao.exceptions.ConstraintException;
 import de.taimos.dao.exceptions.DAOException;
+import de.taimos.dao.exceptions.EntityNotFoundException;
 
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
@@ -44,6 +45,19 @@ public abstract class EntityDAOHibernate<T extends IEntity<U>, U> implements Ent
 	@Transactional
 	public void delete(final T element) {
 		try {
+			this.entityManager.remove(this.entityManager.merge(element));
+		} catch (final HibernateException e) {
+			throw new DAOException(e);
+		}
+	}
+
+	@Override
+	public void deleteById(final U id) {
+		try {
+			final T element = this.findById(id);
+			if (element == null) {
+				throw new EntityNotFoundException();
+			}
 			this.entityManager.remove(element);
 		} catch (final HibernateException e) {
 			throw new DAOException(e);
