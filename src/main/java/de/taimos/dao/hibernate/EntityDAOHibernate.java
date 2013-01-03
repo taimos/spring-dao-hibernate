@@ -8,7 +8,11 @@ import javax.persistence.TypedQuery;
 
 import de.taimos.dao.EntityDAO;
 import de.taimos.dao.IEntity;
+import de.taimos.dao.exceptions.ConstraintException;
+import de.taimos.dao.exceptions.DAOException;
 
+import org.hibernate.HibernateException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -27,24 +31,42 @@ public abstract class EntityDAOHibernate<T extends IEntity<U>, U> implements Ent
 	@Override
 	@Transactional
 	public T save(final T element) {
-		return this.entityManager.merge(element);
+		try {
+			return this.entityManager.merge(element);
+		} catch (final ConstraintViolationException e) {
+			throw new ConstraintException(e);
+		} catch (final HibernateException e) {
+			throw new DAOException(e);
+		}
 	}
 
 	@Override
 	@Transactional
 	public void delete(final T element) {
-		this.entityManager.remove(element);
+		try {
+			this.entityManager.remove(element);
+		} catch (final HibernateException e) {
+			throw new DAOException(e);
+		}
 	}
 
 	@Override
 	public T findById(final U id) {
-		return this.entityManager.find(this.getEntityClass(), id);
+		try {
+			return this.entityManager.find(this.getEntityClass(), id);
+		} catch (final HibernateException e) {
+			throw new DAOException(e);
+		}
 	}
 
 	@Override
 	public List<T> findList() {
-		final TypedQuery<T> query = this.entityManager.createQuery(this.getFindListQuery(), this.getEntityClass());
-		return query.getResultList();
+		try {
+			final TypedQuery<T> query = this.entityManager.createQuery(this.getFindListQuery(), this.getEntityClass());
+			return query.getResultList();
+		} catch (final HibernateException e) {
+			throw new DAOException(e);
+		}
 	}
 
 	/**
@@ -57,19 +79,27 @@ public abstract class EntityDAOHibernate<T extends IEntity<U>, U> implements Ent
 	}
 
 	protected T findByQuery(final String query, final Object... params) {
-		final List<T> list = this.findListByQuery(query, params);
-		if (list.size() == 1) {
-			return list.get(0);
+		try {
+			final List<T> list = this.findListByQuery(query, params);
+			if (list.size() == 1) {
+				return list.get(0);
+			}
+			return null;
+		} catch (final HibernateException e) {
+			throw new DAOException(e);
 		}
-		return null;
 	}
 
 	protected List<T> findListByQuery(final String query, final Object... params) {
-		final TypedQuery<T> tq = this.entityManager.createQuery(query, this.getEntityClass());
-		for (int i = 0; i < params.length; i++) {
-			tq.setParameter(i + 1, params[i]);
+		try {
+			final TypedQuery<T> tq = this.entityManager.createQuery(query, this.getEntityClass());
+			for (int i = 0; i < params.length; i++) {
+				tq.setParameter(i + 1, params[i]);
+			}
+			return tq.getResultList();
+		} catch (final HibernateException e) {
+			throw new DAOException(e);
 		}
-		return tq.getResultList();
 	}
 
 	/**
