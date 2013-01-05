@@ -26,15 +26,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.hibernate.HibernateException;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.transaction.annotation.Transactional;
+
 import de.taimos.dao.EntityDAO;
 import de.taimos.dao.IEntity;
 import de.taimos.dao.exceptions.ConstraintException;
 import de.taimos.dao.exceptions.DAOException;
 import de.taimos.dao.exceptions.EntityNotFoundException;
-
-import org.hibernate.HibernateException;
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author hoegertn

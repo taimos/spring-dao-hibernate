@@ -31,6 +31,6 @@ public interface IEntity<I> {
 	/**
 	 * @return the id of the entity
 	 */
-	public I getId();
+	I getId();
 
 }
