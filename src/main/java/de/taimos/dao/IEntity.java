@@ -3,14 +3,14 @@ package de.taimos.dao;
 /**
  * @author hoegertn
  * 
- * @param <T>
+ * @param <I>
  *            id class
  */
-public interface IEntity<T> {
+public interface IEntity<I> {
 
 	/**
 	 * @return the id of the entity
 	 */
-	public T getId();
+	public I getId();
 
 }

@@ -5,38 +5,43 @@ import java.util.List;
 /**
  * @author hoegertn
  * 
- * @param <T>
+ * @param <E>
  *            the entity type
- * @param <U>
+ * @param <I>
  *            the id type
  */
-public interface EntityDAO<T extends IEntity<U>, U> {
+public interface EntityDAO<E extends IEntity<I>, I> {
 
 	/**
 	 * @param element
 	 * @return the saved element
 	 */
-	T save(T element);
+	E save(E element);
 
 	/**
 	 * @param element
 	 */
-	void delete(T element);
+	void delete(E element);
 
 	/**
 	 * @param id
 	 */
-	void deleteById(U id);
+	void deleteById(I id);
 
 	/**
 	 * @param id
 	 * @return the element with the given id or null if not found
 	 */
-	T findById(U id);
+	E findById(I id);
 
 	/**
 	 * @return the list of elements
 	 */
-	List<T> findList();
+	List<E> findList();
+
+	/**
+	 * @return the entity class
+	 */
+	Class<E> getEntityClass();
 
 }

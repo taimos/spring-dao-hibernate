@@ -19,19 +19,19 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * @author hoegertn
  * 
- * @param <T>
+ * @param <E>
  *            the entity type
- * @param <U>
+ * @param <I>
  *            the id type
  */
-public abstract class EntityDAOHibernate<T extends IEntity<U>, U> implements EntityDAO<T, U> {
+public abstract class EntityDAOHibernate<E extends IEntity<I>, I> implements EntityDAO<E, I> {
 
 	@PersistenceContext
 	protected EntityManager entityManager;
 
 	@Override
 	@Transactional
-	public T save(final T element) {
+	public E save(final E element) {
 		try {
 			return this.entityManager.merge(element);
 		} catch (final ConstraintViolationException e) {
@@ -43,7 +43,7 @@ public abstract class EntityDAOHibernate<T extends IEntity<U>, U> implements Ent
 
 	@Override
 	@Transactional
-	public void delete(final T element) {
+	public void delete(final E element) {
 		try {
 			this.entityManager.remove(this.entityManager.merge(element));
 		} catch (final HibernateException e) {
@@ -52,9 +52,9 @@ public abstract class EntityDAOHibernate<T extends IEntity<U>, U> implements Ent
 	}
 
 	@Override
-	public void deleteById(final U id) {
+	public void deleteById(final I id) {
 		try {
-			final T element = this.findById(id);
+			final E element = this.findById(id);
 			if (element == null) {
 				throw new EntityNotFoundException();
 			}
@@ -65,7 +65,7 @@ public abstract class EntityDAOHibernate<T extends IEntity<U>, U> implements Ent
 	}
 
 	@Override
-	public T findById(final U id) {
+	public E findById(final I id) {
 		try {
 			return this.entityManager.find(this.getEntityClass(), id);
 		} catch (final HibernateException e) {
@@ -74,9 +74,9 @@ public abstract class EntityDAOHibernate<T extends IEntity<U>, U> implements Ent
 	}
 
 	@Override
-	public List<T> findList() {
+	public List<E> findList() {
 		try {
-			final TypedQuery<T> query = this.entityManager.createQuery(this.getFindListQuery(), this.getEntityClass());
+			final TypedQuery<E> query = this.entityManager.createQuery(this.getFindListQuery(), this.getEntityClass());
 			return query.getResultList();
 		} catch (final HibernateException e) {
 			throw new DAOException(e);
@@ -92,9 +92,14 @@ public abstract class EntityDAOHibernate<T extends IEntity<U>, U> implements Ent
 		return "id";
 	}
 
-	protected T findByQuery(final String query, final Object... params) {
+	/**
+	 * @param query
+	 * @param params
+	 * @return the entity or null if not found or more than one found
+	 */
+	protected E findByQuery(final String query, final Object... params) {
 		try {
-			final List<T> list = this.findListByQuery(query, params);
+			final List<E> list = this.findListByQuery(query, params);
 			if (list.size() == 1) {
 				return list.get(0);
 			}
@@ -104,9 +109,9 @@ public abstract class EntityDAOHibernate<T extends IEntity<U>, U> implements Ent
 		}
 	}
 
-	protected List<T> findListByQuery(final String query, final Object... params) {
+	protected List<E> findListByQuery(final String query, final Object... params) {
 		try {
-			final TypedQuery<T> tq = this.entityManager.createQuery(query, this.getEntityClass());
+			final TypedQuery<E> tq = this.entityManager.createQuery(query, this.getEntityClass());
 			for (int i = 0; i < params.length; i++) {
 				tq.setParameter(i + 1, params[i]);
 			}
@@ -124,7 +129,5 @@ public abstract class EntityDAOHibernate<T extends IEntity<U>, U> implements Ent
 	protected String getFindListQuery() {
 		return "FROM " + this.getEntityClass().getSimpleName();
 	}
-
-	protected abstract Class<T> getEntityClass();
 
 }
