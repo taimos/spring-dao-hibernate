@@ -130,10 +130,20 @@ public abstract class EntityDAOHibernate<E extends IEntity<I>, I> implements Ent
 	}
 
 	protected List<E> findListByQuery(final String query, final Object... params) {
+		return this.findListByQuery(query, -1, -1, params);
+	}
+
+	protected List<E> findListByQuery(final String query, final int first, final int max, final Object... params) {
 		try {
 			final TypedQuery<E> tq = this.entityManager.createQuery(query, this.getEntityClass());
 			for (int i = 0; i < params.length; i++) {
 				tq.setParameter(i + 1, params[i]);
+			}
+			if (first >= 0) {
+				tq.setFirstResult(first);
+			}
+			if (max >= 0) {
+				tq.setMaxResults(max);
 			}
 			return tq.getResultList();
 		} catch (final HibernateException e) {
