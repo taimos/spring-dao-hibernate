@@ -60,6 +60,15 @@ public interface EntityDAO<E extends IEntity<I>, I> {
 	List<E> findList();
 
 	/**
+	 * @param first
+	 *            first result
+	 * @param max
+	 *            max results
+	 * @return the list of elements
+	 */
+	List<E> findList(int first, int max);
+
+	/**
 	 * @return the entity class
 	 */
 	Class<E> getEntityClass();

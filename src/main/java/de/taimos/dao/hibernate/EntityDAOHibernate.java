@@ -94,13 +94,24 @@ public abstract class EntityDAOHibernate<E extends IEntity<I>, I> implements Ent
 	}
 
 	@Override
-	public List<E> findList() {
+	public List<E> findList(final int first, final int max) {
 		try {
 			final TypedQuery<E> query = this.entityManager.createQuery(this.getFindListQuery(), this.getEntityClass());
+			if (first >= 0) {
+				query.setFirstResult(first);
+			}
+			if (max >= 0) {
+				query.setMaxResults(max);
+			}
 			return query.getResultList();
 		} catch (final HibernateException e) {
 			throw new DAOException(e);
 		}
+	}
+
+	@Override
+	public List<E> findList() {
+		return this.findList(-1, -1);
 	}
 
 	/**
