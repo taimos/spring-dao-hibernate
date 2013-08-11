@@ -3,6 +3,7 @@ package de.taimos.dao.hibernate;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
 import de.taimos.dao.IEntity;
 
@@ -13,6 +14,7 @@ import de.taimos.dao.IEntity;
  * @author Thorsten Hoeger
  * 
  */
+@MappedSuperclass
 public abstract class AIdEntity implements IEntity<Long> {
 	
 	private Long id;

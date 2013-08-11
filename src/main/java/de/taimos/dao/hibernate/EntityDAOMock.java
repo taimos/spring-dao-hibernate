@@ -68,14 +68,7 @@ public abstract class EntityDAOMock<E extends IEntity<I>, I> implements IEntityD
 	@Override
 	public List<E> findList(final int first, final int max) {
 		List<E> values = new ArrayList<>(this.entities.values());
-		Collections.sort(values, new Comparator<E>() {
-			
-			@Override
-			@SuppressWarnings({"unchecked", "rawtypes"})
-			public int compare(E o1, E o2) {
-				return ((Comparable) o1.getId()).compareTo(o2.getId());
-			}
-		});
+		this.sortById(values);
 		
 		if (first >= 0) {
 			if (max >= 0) {
@@ -87,6 +80,17 @@ public abstract class EntityDAOMock<E extends IEntity<I>, I> implements IEntityD
 			return Collections.unmodifiableList(values.subList(0, Math.max(first + max, values.size())));
 		}
 		return Collections.unmodifiableList(values);
+	}
+	
+	protected void sortById(List<E> values) {
+		Collections.sort(values, new Comparator<E>() {
+			
+			@Override
+			@SuppressWarnings({"unchecked", "rawtypes"})
+			public int compare(E o1, E o2) {
+				return ((Comparable) o1.getId()).compareTo(o2.getId());
+			}
+		});
 	}
 	
 	@Override

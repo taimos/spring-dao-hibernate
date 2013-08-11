@@ -101,7 +101,7 @@ public abstract class EntityDAOHibernate<E extends IEntity<I>, I> implements IEn
 	}
 	
 	protected List<E> findListByQuery(final String query, final Object... params) {
-		return this.findListByQuery(query, -1, -1, params);
+		return this.findListByQueryLimit(query, -1, -1, params);
 	}
 	
 	protected List<E> findListByQueryLimit(final String query, final int first, final int max, final Object... params) {
