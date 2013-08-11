@@ -30,7 +30,7 @@ import java.util.List;
  * @param <I>
  *            the id type
  */
-public interface EntityDAO<E extends IEntity<I>, I> {
+public interface IEntityDAO<E extends IEntity<I>, I> {
 
 	/**
 	 * @param element

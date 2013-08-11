@@ -20,7 +20,7 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import de.taimos.dao.EntityDAO;
+import de.taimos.dao.IEntityDAO;
 import de.taimos.dao.IEntity;
 
 /**
@@ -29,7 +29,7 @@ import de.taimos.dao.IEntity;
  * @param <E> the entity type
  * @param <I> the id type
  */
-public abstract class EntityDAOHibernate<E extends IEntity<I>, I> implements EntityDAO<E, I> {
+public abstract class EntityDAOHibernate<E extends IEntity<I>, I> implements IEntityDAO<E, I> {
 	
 	@PersistenceContext
 	protected EntityManager entityManager;
