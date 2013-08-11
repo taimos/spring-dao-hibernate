@@ -15,8 +15,6 @@ import de.taimos.dao.IEntity;
  */
 public abstract class AIdEntity implements IEntity<Long> {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
 	
@@ -28,6 +26,8 @@ public abstract class AIdEntity implements IEntity<Long> {
 	}
 	
 	@Override
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getId() {
 		return this.id;
 	}

@@ -11,12 +11,14 @@ package de.taimos.dao.hibernate;
  * and limitations under the License. #L%
  */
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,48 +31,62 @@ import de.taimos.dao.IEntityDAO;
  * @param <E> the entity type
  * @param <I> the id type
  */
-public abstract class EntityDAOHibernate<E extends IEntity<I>, I> implements IEntityDAO<E, I> {
+public abstract class EntityDAOMock<E extends IEntity<I>, I> implements IEntityDAO<E, I> {
 	
-	@PersistenceContext
-	protected EntityManager entityManager;
+	protected final ConcurrentHashMap<I, E> entities = new ConcurrentHashMap<>();
 	
 	
 	@Override
 	@Transactional
 	public E save(final E element) {
-		return this.entityManager.merge(element);
+		this.entities.put(element.getId(), element);
+		return element;
 	}
 	
 	@Override
 	@Transactional
 	public void delete(final E element) {
-		this.entityManager.remove(this.entityManager.merge(element));
+		this.deleteById(element.getId());
 	}
 	
 	@Override
 	public void deleteById(final I id) {
-		final E element = this.findById(id);
-		if (element == null) {
+		E remove = this.entities.remove(id);
+		if (remove == null) {
 			throw new EntityNotFoundException();
 		}
-		this.entityManager.remove(element);
 	}
 	
 	@Override
 	public E findById(final I id) {
-		return this.entityManager.find(this.getEntityClass(), id);
+		if (this.entities.containsKey(id)) {
+			return this.entities.get(id);
+		}
+		throw new EntityNotFoundException();
 	}
 	
 	@Override
 	public List<E> findList(final int first, final int max) {
-		final TypedQuery<E> query = this.entityManager.createQuery(this.getFindListQuery(), this.getEntityClass());
+		List<E> values = new ArrayList<>(this.entities.values());
+		Collections.sort(values, new Comparator<E>() {
+			
+			@Override
+			@SuppressWarnings({"unchecked", "rawtypes"})
+			public int compare(E o1, E o2) {
+				return ((Comparable) o1.getId()).compareTo(o2.getId());
+			}
+		});
+		
 		if (first >= 0) {
-			query.setFirstResult(first);
+			if (max >= 0) {
+				return Collections.unmodifiableList(values.subList(first, Math.max(first + max, values.size())));
+			}
+			return Collections.unmodifiableList(values.subList(first, values.size()));
 		}
 		if (max >= 0) {
-			query.setMaxResults(max);
+			return Collections.unmodifiableList(values.subList(0, Math.max(first + max, values.size())));
 		}
-		return query.getResultList();
+		return Collections.unmodifiableList(values);
 	}
 	
 	@Override
@@ -105,18 +121,31 @@ public abstract class EntityDAOHibernate<E extends IEntity<I>, I> implements IEn
 	}
 	
 	protected List<E> findListByQueryLimit(final String query, final int first, final int max, final Object... params) {
-		final TypedQuery<E> tq = this.entityManager.createQuery(query, this.getEntityClass());
-		for (int i = 0; i < params.length; i++) {
-			tq.setParameter(i + 1, params[i]);
+		Collection<E> values = this.entities.values();
+		List<E> filtered = new ArrayList<>();
+		for (E e : values) {
+			if (this.findListByQueryLimitFilter(e, query, params)) {
+				filtered.add(e);
+			}
 		}
+		
+		List<E> sorted = this.findListByQueryLimitSort(filtered, query, params);
+		
 		if (first >= 0) {
-			tq.setFirstResult(first);
+			if (max >= 0) {
+				return Collections.unmodifiableList(sorted.subList(first, Math.max(first + max, values.size())));
+			}
+			return Collections.unmodifiableList(sorted.subList(first, values.size()));
 		}
 		if (max >= 0) {
-			tq.setMaxResults(max);
+			return Collections.unmodifiableList(sorted.subList(0, Math.max(first + max, values.size())));
 		}
-		return tq.getResultList();
+		return Collections.unmodifiableList(sorted);
 	}
+	
+	protected abstract List<E> findListByQueryLimitSort(List<E> filtered, String query, Object... params);
+	
+	protected abstract boolean findListByQueryLimitFilter(E e, String query, Object... params);
 	
 	/**
 	 * Override in sub-class if not "FROM 'EntityName'"
