@@ -48,6 +48,7 @@ public abstract class EntityDAOHibernate<E extends IEntity<I>, I> implements IEn
 	}
 	
 	@Override
+	@Transactional
 	public void deleteById(final I id) {
 		final E element = this.findById(id);
 		if (element == null) {
