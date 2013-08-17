@@ -8,7 +8,7 @@
 
 	<groupId>de.taimos</groupId>
 	<artifactId>spring-dao-hibernate</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.1-SNAPSHOT</version>
 	<name>Hibernate DAO for Spring</name>
 
 	<url>https://github.com/taimos/spring-dao-hibernate</url>
