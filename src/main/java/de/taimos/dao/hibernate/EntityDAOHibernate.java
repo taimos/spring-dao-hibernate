@@ -101,12 +101,37 @@ public abstract class EntityDAOHibernate<E extends IEntity<I>, I> implements IEn
 		return null;
 	}
 	
-	protected List<E> findListByQuery(final String query, final Object... params) {
+	/**
+	 * @param query
+	 * @param params
+	 * @return the entity or null if not found or more than one found
+	 */
+	protected Object[] findGenericByQuery(final String query, final Object... params) {
+		final List<Object[]> list = this.findGenericListByQuery(query, params);
+		if (list.size() == 1) {
+			return list.get(0);
+		}
+		return null;
+	}
+	
+	protected final List<E> findListByQuery(final String query, final Object... params) {
 		return this.findListByQueryLimit(query, -1, -1, params);
 	}
 	
-	protected List<E> findListByQueryLimit(final String query, final int first, final int max, final Object... params) {
-		final TypedQuery<E> tq = this.entityManager.createQuery(query, this.getEntityClass());
+	protected final List<Object[]> findGenericListByQuery(final String query, final Object... params) {
+		return this.findGenericListByQueryLimit(query, -1, -1, params);
+	}
+	
+	protected final List<Object[]> findGenericListByQueryLimit(final String query, final int first, final int max, final Object... params) {
+		return this.findListByQueryLimit(query, Object[].class, first, max, params);
+	}
+	
+	protected final List<E> findListByQueryLimit(final String query, final int first, final int max, final Object... params) {
+		return this.findListByQueryLimit(query, this.getEntityClass(), first, max, params);
+	}
+	
+	private <T> List<T> findListByQueryLimit(final String query, Class<T> clazz, final int first, final int max, final Object... params) {
+		final TypedQuery<T> tq = this.entityManager.createQuery(query, clazz);
 		for (int i = 0; i < params.length; i++) {
 			tq.setParameter(i + 1, params[i]);
 		}
