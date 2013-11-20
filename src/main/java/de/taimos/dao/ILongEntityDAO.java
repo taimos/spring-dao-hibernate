@@ -11,13 +11,13 @@ package de.taimos.dao;
  * and limitations under the License. #L%
  */
 
-import de.taimos.dao.hibernate.AIdEntity;
+import de.taimos.dao.hibernate.ALongEntity;
 
 /**
  * @author hoegertn
  * 
  * @param <E> the entity type
  */
-public interface IIdEntityDAO<E extends AIdEntity> extends IEntityDAO<E, Long> {
+public interface ILongEntityDAO<E extends ALongEntity> extends IEntityDAO<E, Long> {
 	//
 }

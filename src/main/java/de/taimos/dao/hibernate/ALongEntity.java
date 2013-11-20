@@ -15,7 +15,7 @@ import de.taimos.dao.IEntity;
  * 
  */
 @MappedSuperclass
-public abstract class AIdEntity implements IEntity<Long> {
+public abstract class ALongEntity implements IEntity<Long> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -55,7 +55,7 @@ public abstract class AIdEntity implements IEntity<Long> {
 		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
-		AIdEntity other = (AIdEntity) obj;
+		ALongEntity other = (ALongEntity) obj;
 		if (this.id == null) {
 			if (other.id != null) {
 				return false;

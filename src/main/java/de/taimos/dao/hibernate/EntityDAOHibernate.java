@@ -80,20 +80,11 @@ public abstract class EntityDAOHibernate<E extends IEntity<I>, I> implements IEn
 	}
 	
 	/**
-	 * Override in sub-class if not "id"
-	 * 
-	 * @return the id field
-	 */
-	protected String getIdField() {
-		return "id";
-	}
-	
-	/**
 	 * @param query
 	 * @param params
 	 * @return the entity or null if not found or more than one found
 	 */
-	protected E findByQuery(final String query, final Object... params) {
+	protected final E findByQuery(final String query, final Object... params) {
 		final List<E> list = this.findListByQuery(query, params);
 		if (list.size() == 1) {
 			return list.get(0);
@@ -106,7 +97,7 @@ public abstract class EntityDAOHibernate<E extends IEntity<I>, I> implements IEn
 	 * @param params
 	 * @return the entity or null if not found or more than one found
 	 */
-	protected Object[] findGenericByQuery(final String query, final Object... params) {
+	protected final Object[] findGenericByQuery(final String query, final Object... params) {
 		final List<Object[]> list = this.findGenericListByQuery(query, params);
 		if (list.size() == 1) {
 			return list.get(0);
@@ -142,6 +133,15 @@ public abstract class EntityDAOHibernate<E extends IEntity<I>, I> implements IEn
 			tq.setMaxResults(max);
 		}
 		return tq.getResultList();
+	}
+	
+	/**
+	 * Override in sub-class if not "id"
+	 * 
+	 * @return the id field
+	 */
+	protected String getIdField() {
+		return "id";
 	}
 	
 	/**
