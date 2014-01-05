@@ -46,8 +46,8 @@
 	</developers>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<org.springframework.version>3.2.5.RELEASE</org.springframework.version>
-		<hibernate.version>4.2.7.SP1</hibernate.version>
+		<org.springframework.version>3.2.6.RELEASE</org.springframework.version>
+		<hibernate.version>4.3.0.Final</hibernate.version>
 	</properties>
 	<prerequisites>
 		<maven>3.0.0</maven>
