@@ -28,9 +28,12 @@ import de.taimos.dao.IEntityDAO;
 /**
  * @author hoegertn
  * 
+ * @deprecated use in memory db and regular DAOs
+ * 
  * @param <E> the entity type
  * @param <I> the id type
  */
+@Deprecated
 public abstract class EntityDAOMock<E extends IEntity<I>, I> implements IEntityDAO<E, I> {
 	
 	protected final ConcurrentHashMap<I, E> entities = new ConcurrentHashMap<>();
