@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>de.taimos</groupId>
 		<artifactId>oss-parent</artifactId>
-		<version>2</version>
+		<version>4</version>
 	</parent>
 	<artifactId>spring-dao-hibernate</artifactId>
 	<version>1.11-SNAPSHOT</version>
@@ -21,8 +21,8 @@
 		<url>https://github.com/taimos/spring-dao-hibernate/issues</url>
 	</issueManagement>
 	<properties>
-		<org.springframework.version>4.1.3.RELEASE</org.springframework.version>
-		<hibernate.version>4.3.7.Final</hibernate.version>
+		<org.springframework.version>4.1.4.RELEASE</org.springframework.version>
+		<hibernate.version>4.3.8.Final</hibernate.version>
 	</properties>
 	<dependencies>
 		<dependency>
