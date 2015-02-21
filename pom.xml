@@ -6,7 +6,7 @@
 		<version>4</version>
 	</parent>
 	<artifactId>spring-dao-hibernate</artifactId>
-	<version>1.11-SNAPSHOT</version>
+	<version>1.11</version>
 	<name>Hibernate DAO for Spring</name>
 	<url>https://github.com/taimos/spring-dao-hibernate</url>
 	<inceptionYear>2013</inceptionYear>
@@ -14,7 +14,7 @@
 		<connection>scm:git:git@github.com:taimos/spring-dao-hibernate.git</connection>
 		<developerConnection>scm:git:git@github.com:taimos/spring-dao-hibernate.git</developerConnection>
 		<url>scm:git:git@github.com:taimos/spring-dao-hibernate.git</url>
-		<tag>HEAD</tag>
+		<tag>v1.11</tag>
 	</scm>
 	<issueManagement>
 		<system>github</system>
