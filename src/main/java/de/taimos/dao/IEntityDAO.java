@@ -4,7 +4,7 @@ package de.taimos.dao;
  * #%L
  * Hibernate DAO for Spring
  * %%
- * Copyright (C) 2013 Taimos GmbH
+ * Copyright (C) 2013 - 2015 Taimos GmbH
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,34 +31,34 @@ import java.util.List;
  *            the id type
  */
 public interface IEntityDAO<E extends IEntity<I>, I> {
-
+	
 	/**
 	 * @param element
 	 * @return the saved element
 	 */
 	E save(E element);
-
+	
 	/**
 	 * @param element
 	 */
 	void delete(E element);
-
+	
 	/**
 	 * @param id
 	 */
 	void deleteById(I id);
-
+	
 	/**
 	 * @param id
 	 * @return the element with the given id or null if not found
 	 */
 	E findById(I id);
-
+	
 	/**
 	 * @return the list of elements
 	 */
 	List<E> findList();
-
+	
 	/**
 	 * @param first
 	 *            first result
@@ -67,10 +67,10 @@ public interface IEntityDAO<E extends IEntity<I>, I> {
 	 * @return the list of elements
 	 */
 	List<E> findList(int first, int max);
-
+	
 	/**
 	 * @return the entity class
 	 */
 	Class<E> getEntityClass();
-
+	
 }
