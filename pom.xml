@@ -22,13 +22,20 @@
 	</issueManagement>
 	<properties>
 		<org.springframework.version>4.1.6.RELEASE</org.springframework.version>
-		<hibernate.version>4.3.8.Final</hibernate.version>
+		<hibernate.version>4.3.10.Final</hibernate.version>
+		<jodatime.version>2.8.1</jodatime.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${jodatime.version}</version>
 		</dependency>
 
 		<!-- Transaction Management Abstraction (depends on spring-core, spring-beans, spring-aop, spring-context) Define this if you use Spring Transactions 
