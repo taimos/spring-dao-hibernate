@@ -21,9 +21,9 @@
 		<url>https://github.com/taimos/spring-dao-hibernate/issues</url>
 	</issueManagement>
 	<properties>
-		<org.springframework.version>4.1.6.RELEASE</org.springframework.version>
-		<hibernate.version>4.3.10.Final</hibernate.version>
-		<jodatime.version>2.8.1</jodatime.version>
+		<org.springframework.version>4.2.0.RELEASE</org.springframework.version>
+		<hibernate.version>4.3.11.Final</hibernate.version>
+		<jodatime.version>2.8.2</jodatime.version>
 	</properties>
 	<dependencies>
 		<dependency>
